@@ -134,7 +134,8 @@ if callout build "$METADATA/build"; then
 else
 	verbose "Build failed; check $METADATA/build"
 	STATUS=fail
-	message "$NEXT" "$SCRATCH" "$METADATA/build" | mail $BLAME
+	message "$NEXT" "$SCRATCH" "$METADATA/build" |
+		mail -s "Build failure: $NEXT" $BLAME
 fi
 
 echo "$STATUS" > "$METADATA/status"
