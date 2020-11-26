@@ -1,0 +1,5 @@
+#
+# Force a new build, even if it uses the same source as a previous one
+#
+
+echo > "$STATE/current"

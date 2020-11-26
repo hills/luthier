@@ -1,0 +1,20 @@
+#
+# Automatically purge old builds
+#
+
+if ! [ -d "$STATE" ]; then
+	error "$STATE: doesn't look like one of our build directories"
+	exit 1
+fi
+
+find "$BUILDS" -maxdepth 1 -mindepth 1 -type d -mtime +3 |
+	while read SCRATCH
+do
+	verbose "Considering $SCRATCH for purging"
+
+	if ! [ -d "$SCRATCH/.luthier" ]; then
+		error "$SCRATCH: skipping unknown directory"
+	fi
+
+	rm -rf "$SCRATCH"
+done

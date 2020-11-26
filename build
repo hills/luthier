@@ -1,0 +1,144 @@
+#
+# Perform builds, based on a user-provided script
+#
+
+SCRIPT="$BUILDS/luthier.sh"
+
+#
+# Grab a directory necessary for a build
+#
+
+allocate()
+{
+	local WHEN=$(date +%Y%m%d)
+
+	while read COUNT; do
+		TRY="$BUILDS/$WHEN.$COUNT"
+
+		if mkdir "$TRY" 2> /dev/null; then
+			echo "$TRY"
+			return 0
+		fi
+	done < <(seq --equal-width 0 99)
+
+	error "Too many builds today"
+	return 1
+}
+
+#
+# This is the message mailed to the user
+#
+
+message()
+{
+	local FINGERPRINT="$1"; shift
+	local SCRATCH="$1"; shift
+	local LOG="$1"; shift
+
+	local FULL=$(readlink -f "$LOG")
+
+	echo "Build failure, fingerprint $FINGERPRINT"
+	echo "-> $SCRATCH"
+	echo
+
+	cat "$LOG"
+	echo
+
+	echo "-- "
+	echo "luthier"
+}
+
+#
+# Some commands always run on exit, whether success or failure
+#
+
+cleanup()
+{
+	# If any premature exit happens, our default action
+	# is to remove trace of our action.
+
+	if [ -n "$SCRATCH" ]; then
+		rm -rf "$SCRATCH"
+	fi
+}
+
+trap cleanup 0
+
+#
+# The build directory tracks some state between builds
+#
+
+if ! [ -e "$STATE" ]; then
+	verbose "Bootstrapping new build directory"
+
+	mkdir "$STATE"   # don't make the tree; the parent must exit
+	touch "$STATE/current"
+fi
+
+SCRATCH=$(allocate)
+METADATA="$SCRATCH/.luthier"
+mkdir "$METADATA"
+
+verbose "Allocated $SCRATCH"
+
+#
+# Function to perform one of the user-defined commands in context
+#
+
+callout()
+{
+	local FUNC="$1"; shift
+	local LOG="$1"; shift
+
+	"$LIBEXEC/user" "$SCRIPT" "$SCRATCH" "$FUNC" "$LOG"
+}
+
+verbose "Fetching sources"
+
+if ! callout fetch "$METADATA/fetch"; then
+	cat "$METADATA/fetch"  # the scratch dir will be discarded
+	exit 1
+fi
+
+#
+# Don't take up disk space if there's nothing to do
+#
+
+NEXT=$(callout fingerprint -)
+PREV=$(cat "$STATE/current")
+
+if [ "$NEXT" = "$PREV" ]; then
+	verbose "No change to sources; no work to do"
+	exit 0
+fi
+
+echo "$NEXT" > "$STATE/current"
+echo "$NEXT" > "$METADATA/fingerprint"
+
+#
+# Work out who we would notify for failures. Always do this;
+# we don't want to find out on a failure that it's broken.
+#
+
+BLAME=$(callout blame -)
+
+#
+# Go ahead and action the build
+#
+
+verbose "Building"
+
+if callout build "$METADATA/build"; then
+	verbose "Build was successful"
+	STATUS=complete
+else
+	verbose "Build failed; check $METADATA/build"
+	STATUS=fail
+	message "$NEXT" "$SCRATCH" "$METADATA/build" | mail $BLAME
+fi
+
+echo "$STATUS" > "$METADATA/status"
+echo "$STATUS" > "$STATE/status"
+
+# This process completed, so keep the data
+SCRATCH=

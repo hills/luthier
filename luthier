@@ -1,0 +1,86 @@
+#!/bin/bash
+#
+# Automate the fetching and building of something, and manage
+# the builds.
+#
+
+set -eu
+
+VERBOSE=false
+
+verbose()
+{
+	if $VERBOSE; then
+		echo "$@" >&2
+	fi
+}
+
+error()
+{
+	echo "$@" >&2
+}
+
+#
+# Start with recommended defaults, parse the rest
+#
+
+BUILDS=.
+
+while true; do
+	case "${1-}" in
+	--verbose)
+		shift
+		VERBOSE=true
+		;;
+
+	--builds)
+		shift
+		BUILDS="$1"; shift
+		;;
+	*)
+		break
+	esac
+done
+
+if [ -z "${1-}" ]; then
+	ACTION=list
+else
+	ACTION="$1"; shift
+fi
+
+#
+# Work out where our related files are
+#
+
+BIN=$(dirname $(which $0))
+LIBEXEC="$BIN/../libexec/luthier"
+
+if ! [ -d "$LIBEXEC" ]; then
+	LIBEXEC=.
+fi
+
+verbose "Supplementary commands installed in $LIBEXEC"
+
+STATE="$BUILDS/.luthier"
+
+case "$ACTION" in
+build)
+	source "$LIBEXEC/build"
+	;;
+
+freshen)
+	source "$LIBEXEC/freshen"
+	;;
+
+purge)
+	source "$LIBEXEC/purge"
+	;;
+
+ls|list)
+	source "$LIBEXEC/list"
+	;;
+
+*)
+	error "$ACTION: unknown command"
+	exit 1
+esac

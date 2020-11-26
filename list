@@ -1,0 +1,28 @@
+#
+# Informative list of the available builds
+#
+# This command exists because it's hard to see at a glance what
+# was built and the status of those.
+#
+
+find "$BUILDS" -maxdepth 1 -mindepth 1 -type d -printf "%f %CH:%CM\n" |
+	while read CANDIDATE WHEN
+do
+	METADATA="$CANDIDATE/.luthier"
+
+	if ! [ -d "$METADATA" ]; then
+		continue
+	fi
+
+	STATUS=$(cat "$METADATA/status" 2> /dev/null || true)
+	FINGERPRINT=$(cat "$METADATA/fingerprint" 2> /dev/null || true)
+
+	printf "%s %s % 8s %s\n" \
+		"$CANDIDATE" "$WHEN" "$FINGERPRINT" "$STATUS"
+done |
+	sort -n
+
+CURRENT=$(cat "$STATE/current")
+STATUS=$(cat "$STATE/status")
+
+printf "\nCurrently: %s at %s\n" "$STATUS" "$CURRENT"

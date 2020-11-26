@@ -1,0 +1,27 @@
+#!/bin/sh
+#
+# Run a user-provided function
+#
+# This exists as its own script, as we need to preserve the "set -e"
+# semantics and be able to evaluate the return code if the user's
+# commands error.
+#
+
+set -eu
+
+SCRIPT="$1"; shift
+SCRATCH="$1"; shift
+FUNC="$1"; shift
+LOG="$1"; shift
+
+source "$SCRIPT"
+
+case "$LOG" in
+-)
+	(cd "$SCRATCH" && "$FUNC")
+	;;
+
+*)
+	(cd "$SCRATCH" && "$FUNC") > "$LOG" 2>&1
+	;;
+esac

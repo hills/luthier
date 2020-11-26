@@ -1,0 +1,45 @@
+Luthier: automated builds
+=========================
+
+Luthier will automate the fetching and building of something. Where
+sensible, it saves the results and notifies developers where
+necessary.
+
+
+Setting up
+----------
+
+Create a 'builds' directory to use as scratch/workspace:
+
+  $ mkdir mywork
+
+In that directory, a script defines a set of actions;
+
+  $ vi builds/luthier.sh
+
+Take a look at the example file for what these functions are
+and why they exist.
+
+
+Running
+-------
+
+This command will run the most recent automated build, and notify
+where necessary:
+
+  $ luthier --verbose --builds mywork build
+
+It's designed to be run from crontab or non-interactive environment,
+by being silent except on fatal errors; build errors are emailed
+separately. This is the command to put in a crontab:
+
+  $ luthier --builds /path/to/mywork build
+
+Other useful commands are:
+
+  $ luthier freshen     # force rebuild even if fingerprints match
+  $ luthier list        # list current builds
+  $ luthier purge       # purge old builds
+
+The default path for builds is the current directory, so interactive
+commands are easiest run like that.
