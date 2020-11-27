@@ -8,7 +8,7 @@
 find "$BUILDS" -maxdepth 1 -mindepth 1 -type d -printf "%f %CH:%CM\n" |
 	while read CANDIDATE WHEN
 do
-	METADATA="$CANDIDATE/.luthier"
+	METADATA="$BUILDS/$CANDIDATE/.luthier"
 
 	if ! [ -d "$METADATA" ]; then
 		continue
