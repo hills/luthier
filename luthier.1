@@ -1,0 +1,41 @@
+.TH LUTHIER "1"
+.SH NAME
+luthier \- automated builds
+.SH SYNOPSIS
+.B luthier
+\fIoptions\fR build
+
+.B luthier
+\fIoptions\fR list
+
+.B luthier
+\fIoptions\fR freshen
+
+.B luthier
+\fIoptions\fR purge
+.SH DESCRIPTION
+Luthier automates the fetching and building of something, deciding
+when to keep the results and notify developers.
+.SH OPTIONS
+.TP
+.B \-\-builds \fIdirname\fR
+Path to the the working directory for builds, containing the
+.B luthier.sh
+script. The default is the current directory.
+.TP
+.B \-\-verbose
+Display information on progress to stderr. By default, only errors
+are displayed.
+.SH EXIT STATUS
+Exit status is normally zero. Non-zero indicates an error.
+
+In the case of the
+.B build
+command, non-zero indicates failure to action the automated build,
+not the result of the build itself. Where the 
+.B build()
+function given by the user encounters an error, luthier handles the
+reporting of this and returns zero to indicate it completed its role
+successfully.
+.SH AUTHOR
+Mark Hills <mark@xwax.org>
