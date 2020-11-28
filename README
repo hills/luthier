@@ -1,9 +1,21 @@
 Luthier: automated builds
 =========================
 
-Luthier will automate the fetching and building of something. Where
-sensible, it saves the results and notifies developers where
-necessary.
+Luthier will automate the fetching and building of something, deciding
+when to keep the results and notify developers.
+
+It has been used successfully to make simple CI/CD pipelines.
+
+Motivations:
+
+* Lightweight: usable for personal projects
+* 'Unix-like' feel
+* 'Silent on success', low noise
+* Good defaults
+* Use with any version control, not just Git
+* Choose your own build environment, eg. default environment, or docker
+
+The 'build' step can mean anything you want; build, test, deploy.
 
 
 Setting up
