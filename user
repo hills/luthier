@@ -12,16 +12,11 @@ set -eu
 SCRIPT="$1"; shift
 SCRATCH="$1"; shift
 FUNC="$1"; shift
-LOG="$1"; shift
 
 source "$SCRIPT"
 
-case "$LOG" in
--)
+if [ -n "${1-}" ]; then
+	(cd "$SCRATCH" && "$FUNC") > "$1" 2>&1
+else
 	(cd "$SCRATCH" && "$FUNC")
-	;;
-
-*)
-	(cd "$SCRATCH" && "$FUNC") > "$LOG" 2>&1
-	;;
-esac
+fi

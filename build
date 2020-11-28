@@ -87,10 +87,7 @@ verbose "Allocated $SCRATCH"
 
 callout()
 {
-	local FUNC="$1"; shift
-	local LOG="$1"; shift
-
-	"$LIBEXEC/user" "$SCRIPT" "$SCRATCH" "$FUNC" "$LOG"
+	"$LIBEXEC/user" "$SCRIPT" "$SCRATCH" "$@"
 }
 
 verbose "Fetching sources"
@@ -104,7 +101,7 @@ fi
 # Don't take up disk space if there's nothing to do
 #
 
-NEXT=$(callout fingerprint -)
+NEXT=$(callout fingerprint)
 PREV=$(cat "$STATE/current")
 
 if [ "$NEXT" = "$PREV" ]; then
@@ -120,7 +117,7 @@ echo "$NEXT" > "$METADATA/fingerprint"
 # we don't want to find out on a failure that it's broken.
 #
 
-BLAME=$(callout blame -)
+BLAME=$(callout blame)
 
 #
 # Go ahead and action the build
