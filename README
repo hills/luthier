@@ -16,7 +16,7 @@ Motivations:
 * Use with any version control, not just Git
 * Choose your own build environment, eg. default environment, or docker
 
-The 'build' step can mean anything you want; build, test, deploy.
+The 'build' step can mean anything you want; compile, test, deploy.
 
 
 Setting up

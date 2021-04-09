@@ -29,7 +29,7 @@ fingerprint()
 # Do the 'build'
 #
 # Whatever you define the build as. Could be a container or VM,
-# running tests, deployment.
+# compiling, running tests, deployment.
 #
 
 build()
