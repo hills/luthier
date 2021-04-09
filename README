@@ -19,6 +19,14 @@ Motivations:
 The 'build' step can mean anything you want; compile, test, deploy.
 
 
+Installation
+------------
+
+The default is to install to /usr/local:
+
+  $ make install    # as root
+
+
 Setting up
 ----------
 
