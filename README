@@ -55,3 +55,11 @@ Other useful commands are:
 
 The default path for builds is the current directory, so interactive
 commands are easiest run like that.
+
+
+Code
+----
+
+The code is Bash shell, developed on Linux with GNU utilities. In
+general there is a leaning towards future portability and use of
+Bash-specific features sparingly.
