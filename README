@@ -30,7 +30,7 @@ In that directory, a script defines a set of actions;
 
   $ vi builds/luthier.sh
 
-Take a look at the example file for what these functions are
+Take a look at the "example" directory for what these functions are
 and why they exist.
 
 
