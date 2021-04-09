@@ -10,6 +10,7 @@ Motivations:
 
 * Lightweight: usable for personal projects
 * 'Unix-like' feel
+* Don't force use of specific UIDs, GIDs etc.; leave up to the user
 * 'Silent on success', low noise
 * Good defaults
 * Use with any version control, not just Git
