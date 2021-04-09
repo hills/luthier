@@ -12,7 +12,7 @@ luthier \- automated builds
 \fIoptions\fR freshen
 
 .B luthier
-\fIoptions\fR purge
+\fIoptions\fR purge \fIoptions\fR
 .SH DESCRIPTION
 Luthier automates the fetching and building of something, deciding
 when to keep the results and notify developers.
@@ -26,6 +26,17 @@ script. The default is the current directory.
 .B \-\-verbose
 Display information on progress to stderr. By default, only errors
 are displayed.
+.PP
+Options to the
+.B purge
+command:
+.TP
+.B \-\-retain \fInumber\fR
+All but the most recent \fInumber\fR builds will be a target for
+deletion.
+.TP
+.B \-\-dry\-run
+Instead of deleting, output a list of actions that would be done.
 .SH EXIT STATUS
 Exit status is normally zero. Non-zero indicates an error.
 

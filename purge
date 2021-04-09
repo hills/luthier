@@ -1,20 +1,85 @@
 #
-# Automatically purge old builds
+# Automatically purge old builds; careful!
 #
+
+#
+# Output the list of builds
+#
+# Do as much validation as possible that these are directories
+# managed by this application.
+#
+
+candidates()
+{
+	find "$BUILDS" -maxdepth 1 -mindepth 1 -type d -printf "%f\n" |
+		while read CANDIDATE
+	do
+		METADATA="$BUILDS/$CANDIDATE/.luthier"
+
+		if [ -d "$METADATA" ]; then
+			verbose "$CANDIDATE: identified as a build"
+			echo "$CANDIDATE"
+		else
+			verbose "$CANDIDATE: ignoring; not a build"
+		fi
+	done
+}
+
+#
+# Pass if the given argument is a positive integer
+#
+
+is_number()
+{
+	test "$1" -ge 0 2> /dev/null
+}
 
 if ! [ -d "$STATE" ]; then
 	error "$STATE: doesn't look like one of our build directories"
 	exit 1
 fi
 
-find "$BUILDS" -maxdepth 1 -mindepth 1 -type d -mtime +3 |
-	while read SCRATCH
+#
+# Start with some useful defaults, parse the rest
+#
+
+RETAIN=
+DRY=
+
+while true; do
+	case "${1-}" in
+	--retain)
+		shift
+		RETAIN="$1"; shift
+		;;
+	--dry-run)
+		shift
+		DRY="echo"
+		;;
+	'')
+		break
+		;;
+	*)
+		fatal_option "$@"
+		;;
+	esac
+done
+
+if [ -z "$RETAIN" ]; then
+	fatal_usage "Number of builds must be given; try --retain"
+fi
+
+if ! is_number "$RETAIN"; then
+	fatal_usage "$RETAIN: number of builds must be a positive integer"
+fi
+
+LINES=$(expr "$RETAIN" + 1)
+
+candidates |
+	sort -r |
+	tail --lines "+$LINES" |
+	while read TARGET
 do
-	verbose "Considering $SCRATCH for purging"
-
-	if ! [ -d "$SCRATCH/.luthier" ]; then
-		error "$SCRATCH: skipping unknown directory"
-	fi
-
-	rm -rf "$SCRATCH"
+	verbose "$TARGET: identified for deletion"
+	$DRY rm -Rf -- "$BUILDS/$TARGET"
 done

@@ -20,6 +20,24 @@ error()
 	echo "$@" >&2
 }
 
+fatal()
+{
+	local CODE="$1"; shift
+
+	error "$@"
+	exit "$CODE"
+}
+
+fatal_usage()
+{
+	fatal 64 "$@"
+}
+
+fatal_option()
+{
+	fatal_usage "$1: unknown option"
+}
+
 #
 # Start with recommended defaults, parse the rest
 #
@@ -81,6 +99,5 @@ ls|list)
 	;;
 
 *)
-	error "$ACTION: unknown command"
-	exit 1
+	fatal_option "$ACTION"
 esac
