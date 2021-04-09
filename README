@@ -55,7 +55,10 @@ Other useful commands are:
   $ luthier purge       # purge old builds
 
 The default path for builds is the current directory, so interactive
-commands are easiest run like that.
+commands are easy to use; eg. if you want to see what's going on:
+
+  $ cd /path/to/mywork
+  $ luthier
 
 
 Code
