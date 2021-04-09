@@ -81,5 +81,5 @@ candidates |
 	while read TARGET
 do
 	verbose "$TARGET: identified for deletion"
-	$DRY rm -Rf -- "$BUILDS/$TARGET"
+	$DRY rm -rf -- "$BUILDS/$TARGET"
 done
