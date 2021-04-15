@@ -19,7 +19,7 @@ do
 	FINGERPRINT=$(cat "$METADATA/fingerprint" 2> /dev/null || true)
         SUMMARY=$(callout summary 2> /dev/null || true)
 
-	printf "%s %s % 8s %s %s\n" \
+	printf "%s %s %s %s %s\n" \
 		"$CANDIDATE" "$WHEN" "$FINGERPRINT" "$STATUS" "$SUMMARY"
 done |
 	sort -n
