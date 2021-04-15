@@ -75,3 +75,23 @@ Code
 The code is Bash shell, developed on Linux with GNU utilities. In
 general there is a leaning towards future portability and use of
 Bash-specific features sparingly.
+
+
+Example
+-------
+
+Viewing the list of builds:
+
+  /project/builds$ luthier
+  20210413.01 11:35 355592 complete => Tue 11:45 (joe)
+  20210415.00 10:45 492843 complete
+  20210415.01 11:15 35c9f3 fail
+  20210415.02 12:30 7f62e4 fail
+  20210415.03 16:17 a67293 complete => Thu 16:25 (mark)
+  20210415.04 16:31 977517 complete
+  20210415.05 17:10 0bfae7 complete
+  20210415.06 17:15 f83087 complete
+  20210415.07 17:40 300ba8 complete => Fri 09:18 (mark)
+  20210416.01 11:50 bd65e1 complete
+
+  Currently: complete at bd65e1
