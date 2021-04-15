@@ -2,8 +2,6 @@
 # Perform builds, based on a user-provided script
 #
 
-SCRIPT="$BUILDS/luthier.sh"
-
 #
 # Grab a directory necessary for a build
 #
@@ -79,18 +77,7 @@ SCRATCH=$(allocate)
 METADATA="$SCRATCH/.luthier"
 mkdir "$METADATA"
 
-verbose "Allocated $SCRATCH"
-
-#
-# Function to perform one of the user-defined commands in context
-#
-
-callout()
-{
-	"$LIBEXEC/user" "$SCRIPT" "$SCRATCH" "$@"
-}
-
-verbose "Fetching sources"
+verbose "Fetching sources to $SCRATCH"
 
 if ! callout fetch "$METADATA/fetch"; then
 	cat "$METADATA/fetch"  # the scratch dir will be discarded

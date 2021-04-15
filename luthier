@@ -39,6 +39,15 @@ fatal_option()
 }
 
 #
+# Function to perform one of the user-defined commands in context
+#
+
+callout()
+{
+	"$LIBEXEC/user" "$SCRIPT" "$SCRATCH" "$@"
+}
+
+#
 # Start with recommended defaults, parse the rest
 #
 
@@ -80,6 +89,7 @@ fi
 verbose "Supplementary commands installed in $LIBEXEC"
 
 STATE="$BUILDS/.luthier"
+SCRIPT="$BUILDS/luthier.sh"
 
 case "$ACTION" in
 build)
