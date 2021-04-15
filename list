@@ -8,7 +8,8 @@
 find "$BUILDS" -maxdepth 1 -mindepth 1 -type d -printf "%f %CH:%CM\n" |
 	while read CANDIDATE WHEN
 do
-	METADATA="$BUILDS/$CANDIDATE/.luthier"
+	SCRATCH="$BUILDS/$CANDIDATE"
+	METADATA="$SCRATCH/.luthier"
 
 	if ! [ -d "$METADATA" ]; then
 		continue
@@ -16,9 +17,10 @@ do
 
 	STATUS=$(cat "$METADATA/status" 2> /dev/null || true)
 	FINGERPRINT=$(cat "$METADATA/fingerprint" 2> /dev/null || true)
+        SUMMARY=$(callout summary 2> /dev/null || true)
 
-	printf "%s %s % 8s %s\n" \
-		"$CANDIDATE" "$WHEN" "$FINGERPRINT" "$STATUS"
+	printf "%s %s % 8s %s %s\n" \
+		"$CANDIDATE" "$WHEN" "$FINGERPRINT" "$STATUS" "$SUMMARY"
 done |
 	sort -n
 

@@ -38,6 +38,19 @@ build()
 }
 
 #
+# Output human-readable summary of this build to stdout
+#
+# This summary can be anything you want, and will be used by the
+# "list" command. Examples: most recent error; date/time this build
+# was certified.
+#
+
+summary()
+{
+	echo "$(ls | wc -l) files"
+}
+
+#
 # Recipients of build failure notifications; a list of email addresses
 # to stdout
 #
